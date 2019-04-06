@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+    <!--parameterType接收参数的类型  -->
+    <!--resultType返回类型  -->
+    <!--namespace="包名mapper接口"  -->
+    
+    
+    
+   <mapper namespace="com.fh.shop.backend.mapper.user.IUserMapper">
+
+	<resultMap id="userMap" type="user">
+
+		<result column="deptId" property="dept.id"></result>
+		<result column="deptName" property="dept.deptName"></result>
+		<!--<result column="productImagePath" property="imageVO.productImagePath"></result>-->
+		<!--<result column="productId" property="imageVO.productId"></result>-->
+
+	</resultMap>
+
+
+	<!--  where拼接条件 -->
+	<sql id="userWhere">
+		<where>
+			<!-- 名称 -->
+			<if test="userName!=null and userName!=''"> userName like concat('%',#{userName},'%')</if>
+
+			<if test="minBirthday!=null ">  and birthday  >= #{minBirthday} </if>
+			<if test="maxBirthday!=null "> and  birthday  &lt;= #{maxBirthday} </if>
+			<if test="minSalary>0"> and  salary >=#{minSalary}  </if>
+			<if test="maxSalary>0"> and  salary  &lt;=#{maxSalary} </if>
+			<if test="integerList!=null and integerList!=''"> and deptId in
+				<foreach collection="integerList" item="id" open="(" close=")" separator=",">
+					#{id}
+				</foreach>
+			</if>
+
+		</where>
+	</sql>
+
+
+
+
+	<!-- 用户登陆查询 -->
+	<select id="findUser"  parameterType="user" resultType="user">
+	select id,realName,birthday,salary,sex,salt,deptId,userName,password,loginTime,times,errorLoginTime,loginStatus,errorTimes from t_userProduct where userName=#{userName}
+	</select>
+	<!-- 新用户注册 -->
+	<!--<insert id="addNewUser" parameterType="user">
+	insert into  t_userProduct (userName,password,salt,realName,birthday,salary,sex,deptId) values(#{userName},#{password},#{salt},#{realName},#{birthday},#{salary},#{sex},#{deptId})
+	</insert>
+	-->
+	<insert id="addNewUser" parameterType="user">
+	insert into  t_userProduct (userName,password,salt) values(#{userName},#{password},#{salt})
+	</insert>
+
+	<!-- 保存login日志记录 -->
+  <insert id="addLoginInfo" parameterType="loginInfo">
+  insert into  t_login (userName,method,classPath,startTime,endTime,ip) values(#{userName},#{method},#{classPath},#{startTime},#{endTime},#{ip})
+  </insert>
+	<!--更新登录时间和登录次数-->
+  <update id="updateUser" parameterType="user">
+	  update t_userProduct set errorTimes=#{errorTimes}, loginTime=#{loginTime},times=#{times},errorLoginTime=#{errorLoginTime},loginStatus=#{loginStatus} where id=#{id}
+  </update>
+
+
+
+	<!-- 总条数查询 -->
+	<select id="findTotalCount" parameterType="user" resultType="long">
+		select count(*) from t_userProduct
+		<include refid="userWhere"/>
+	</select>
+	<!-- 分页查询 -->
+	<select id="findUserList" parameterType="user" resultMap="userMap">
+		select t.*from (select u.id,realName,deptName,birthday,salary,sex,salt,deptId,userName,password,loginTime,times,errorLoginTime,loginStatus,errorTimes from t_userProduct u
+		left join  t_dept d  on u.deptId=d.id
+		<include refid="userWhere"/>
+		order by id desc
+		)t
+		limit #{draw},#{length}
+	</select>
+     <!--用户部门信息添加-->
+	<insert id="addUserDept" parameterType="user">
+	insert into  t_userProduct (userName,realName,deptId,salary,birthday,sex,password,salt) values(#{userName},#{realName},#{dept.id},#{salary},#{birthday},#{sex},#{password},#{salt})
+	</insert>
+
+	<!--回显-->
+	<select id="findUserById"  parameterType="int" resultMap="userMap">
+	select u.id,realName,birthday,salary,sex,userName,deptId,deptName from t_userProduct u
+	left join  t_dept d  on u.deptId=d.id
+	where u.id=#{id}
+
+	</select>
+
+<!--修改-->
+	<update id="updateUserDept" parameterType="user">
+	  update t_userProduct set sex=#{sex}, realName=#{realName}, birthday=#{birthday},salary=#{salary},userName=#{userName},deptId=#{dept.id} where id=#{id}
+  </update>
+  <!--批量删除-->
+
+	<delete id="batchDelete" >
+		delete  from t_userProduct where id in
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+
+	</delete>
+
+
+	<!--批量修改部门-->
+	<update id="batchChangeDept" parameterType="user">
+		update t_userProduct set deptId=#{deptId} where id in
+		<foreach collection="integerList" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	<!--按部门删除员工-->
+
+
+	<delete id="batchDeleteByDeptId" >
+		delete  from t_userProduct where deptId in
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+
+	</delete>
+
+
+	<!--excel-->
+	<select id="findDeptList"  parameterType="int" resultMap="userMap">
+	select u.id,realName,birthday,salary,sex,userName,deptId,deptName from t_userProduct u
+	left join  t_dept d  on u.deptId=d.id
+	where deptId in
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+
+	</select>
+
+
+
+
+</mapper>
+    

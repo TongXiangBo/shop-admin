@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+
+    
+   <mapper namespace="com.fh.shop.backend.mapper.area.IAreaMapper">
+
+
+
+	<!-- 用户登陆查询 -->
+	<select id="findZTreeArea"  resultType="area" >
+	select id,pid,cityName from t_area;
+	</select>
+
+
+	<!-- 部门添加-->
+	<insert id="addAreaInfo" parameterType="area">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			select last_insert_id();
+		</selectKey>
+		insert into t_area (cityName,pid) values(#{cityName},#{pid})
+
+	</insert>
+	<!-- 批量删除-->
+	<delete id="batchDelete" >
+		delete  from t_area where id in
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+
+	</delete>
+	<!--修改-->
+	<update id="updateAreaInfo" parameterType="area">
+		update  t_area set cityName=#{cityName},pid=#{pid} where id=#{id}
+	</update>
+
+
+	<!--接口查询-->
+	<select id="findCityList" resultType="area">
+		select id,pid,cityName from t_area where pid=#{id};
+	</select>
+
+</mapper>
+    

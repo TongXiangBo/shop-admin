@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+    <!--parameterType接收参数的类型  -->
+    <!--resultType返回类型  -->
+    <!--namespace="包名mapper接口"  -->
+    
+    
+    
+   <mapper namespace="com.fh.shop.backend.mapper.brand.IBrandImageMapper">
+
+	<!-- 品牌图片添加 -->
+	<insert id="addBrandImage"  parameterType="list">
+	insert into t_brandImage (brandImagePath,brandIamgeId) values
+	 <foreach collection="list" item="brandImg" separator=",">
+         (#{brandImg.brandImagePath},#{brandImg.brandIamgeId})
+     </foreach>
+
+	</insert>
+    <!--图片子图查询-->
+   <select id="viewChildImages" parameterType="int" resultType="brandImage">
+       select id,brandImagePath,brandIamgeId from t_brandImage  where brandIamgeId=#{id}
+   </select>
+	<!--删除字图片-->
+    <delete id="deleteBrandImage">
+        delete  from t_brandImage where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+           #{id}
+        </foreach>
+
+    </delete>
+
+  </mapper>
+    

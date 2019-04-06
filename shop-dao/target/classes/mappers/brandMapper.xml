@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+    <!--parameterType接收参数的类型  -->
+    <!--resultType返回类型  -->
+    <!--namespace="包名mapper接口"  -->
+    
+    
+    
+   <mapper namespace="com.fh.shop.backend.mapper.brand.IBrandMapper">
+  <!--  where拼接条件 -->
+   <sql id="brandWhere">
+   <where>
+   <!-- 名称 -->  
+   <if test="brandName!=null and brandName!=''"> brandName like concat('%',#{brandName},'%')</if>
+  <!--  创建时间 -->
+   <if test="minCreateTime!=null and minCreateTime!=''"> and createTime >=#{minCreateTime}</if>
+   <if test="maxCreateTime!=null and maxCreateTime!=''"> and createTime &lt;=#{maxCreateTime}</if>
+   <!-- 修改时间 -->
+    <if test="minUpdateTime!=null and minUpdateTime!=''"> and updateTime >=#{minUpdateTime}</if>
+   <if test="maxUpdateTime!=null and maxUpdateTime!=''"> and  updateTime &lt;=#{maxUpdateTime}</if>
+   </where>
+   </sql>
+   
+   <!-- 总条数查询 -->
+   <select id="findTotalCount" parameterType="brand" resultType="long">
+   select count(*) from t_brand
+   <include refid="brandWhere"/>
+   </select>
+   <!-- 分页查询 -->
+   <select id="findBrandList" parameterType="brand" resultType="brand">
+   select t.*from (select brandImagePath,id,brandName,createTime,updateTime from t_brand
+   <include refid="brandWhere"/>
+   order by id desc
+   )t 
+   limit #{draw},#{length}
+   </select>
+	<!-- 品牌添加 -->
+	<insert id="addBrand"  parameterType="brand" useGeneratedKeys="true" keyProperty="id">
+	insert into t_brand (brandName,createTime,updateTime,brandImagePath) values (#{brandName},#{createTime},#{updateTime},#{brandImagePath})
+	</insert>
+	<!-- 单个删除 -->
+	<delete id="deleteBrand"  parameterType="int">
+	delete from t_brand where id=#{id}
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="batchDalete"  parameterType="list">
+	delete from t_brand where id in
+	<foreach collection="list" item="id" open="(" close=")" separator=",">
+	#{id}
+	</foreach>
+	</delete>
+	
+	<!-- 品牌回显 -->
+	<select id="toUpdateBrand" parameterType="brand" resultType="brand">
+	select id,brandName,createTime,updateTime,brandImagePath from t_brand where id=#{id}
+	</select>
+	<!-- 品牌修改 -->
+	<update id="updateBrand" parameterType="brand">
+	update t_brand set brandName=#{brandName},updateTime=#{updateTime} where id=#{id}
+	</update>
+	<!-- 动态下拉框查询 -->
+	<select id="findBrandSelect" resultType="brand">
+	select id,brandName from t_brand
+	</select>
+
+    <!-- 品牌图片修改 -->
+    <update id="updateBrandImage" parameterType="brand">
+	update t_brand set brandImagePath=#{brandImagePath}, brandName=#{brandName},updateTime=#{updateTime} where id=#{id}
+	</update>
+  </mapper>
+    

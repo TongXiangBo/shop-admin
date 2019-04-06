@@ -1,0 +1,15 @@
+1.在项目中导入My97文件夹
+
+2.在相应的jsp页面引入WdatePicker.js 文件
+	<script type="text/javascript" src="<%=request.getContextPath()%>/js/My97DatePicker/WdatePicker.js"></script>
+3.使用My97的input框写法：(函数名区分大小写)
+
+	<input type="text" class="Wdate" nane="date" onClick="WdatePicker()">
+	
+	
+4.研究 MY97  控制时间范围   换皮肤
+	
+
+
+5.时间控件  研究
+

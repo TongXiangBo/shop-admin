@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+    <!--parameterType接收参数的类型  -->
+    <!--resultType返回类型  -->
+    <!--namespace="包名mapper接口"  -->
+    
+    
+    
+   <mapper namespace="com.fh.shop.backend.mapper.product.IProductMapper">
+   
+ <sql id="productWhere">
+<where>
+<if test="productName != null and productName != ''"> productName like concat('%',#{productName},'%') </if>
+<!-- 价格 区间查询-->
+<if test="minPrice != null and minPrice >= 0"> and price >= #{minPrice} </if>
+<if test="maxPrice != null and maxPrice >= 0"> and price &lt;= #{maxPrice} </if>
+<!-- 创建时间 -->
+<if test="minCreateTime != null and minCreateTime != ''"> and p.createTime >= #{minCreateTime} </if>
+<if test="maxCreateTime != null and maxCreateTime != ''"> and p.createTime &lt;= #{maxCreateTime} </if>
+<!-- 修改时间 -->
+<if test="minUpdateTime != null and minUpdateTime!= ''"> and p.updateTime >= #{minUpdateTime} </if>
+<if test="maxUpdateTime != null and maxUpdateTime!= ''"> and p.updateTime &lt;= #{maxUpdateTime} </if>
+<if test="brand.id!=null and brand.id!='' and brand.id!=-1"> and brandId =#{brand.id}</if>
+</where>
+</sql>
+   
+   
+   <resultMap id="productMap" type="product">
+    <result column="id" property="id"></result>
+    <result column="productName" property="productName"></result>
+    <result column="price" property="price"></result>
+    <result column="brandId" property="brand.id"></result>
+    <result column="brandName" property="brand.brandName"></result>
+       <result column="imagePath" property="imagePath"></result>
+	   <!--<result column="productImagePath" property="imageVO.productImagePath"></result>-->
+	   <!--<result column="productId" property="imageVO.productId"></result>-->
+    </resultMap>
+	<!--poi导出-->
+	<select id="findProductExcel" parameterType="product"  resultMap="productMap">
+	  select p.id,productName,price,brandId,b.brandName,p.createTime,p.updateTime from t_product p
+		left join t_brand b  on p.brandId=b.id
+		<include refid="productWhere"/>
+
+
+	</select>
+
+
+
+
+	<!-- 查询 -->
+<select id="findProductList" parameterType="product"  resultMap="productMap">
+		select t.* from ( select imagePath, p.id,productName,price,brandId,b.brandName,p.createTime,p.updateTime from t_product p
+		left join t_brand b  on p.brandId=b.id
+
+     <include refid="productWhere"/>
+
+     <if test="data_rank_msg==null or data_rank_msg=='' "> order by p.id desc</if>
+
+     <if test="data_rank_msg!=null and data_rank_msg!=''">
+     order by ${data_rank_msg} ${data_rank}
+     </if>
+      ) t limit #{startPos},#{pageSize}
+	</select>
+
+
+	<!--<select id="findProductList" parameterType="product"  resultMap="productMap">
+		select imagePath, p.id,productName,price,brandId,b.brandName,p.createTime,p.updateTime from t_product p
+		left join t_brand b  on p.brandId=b.id
+
+		<include refid="productWhere"/>
+		&lt;!&ndash;  默认id降序 &ndash;&gt;
+		<if test="data_rank_msg==null or data_rank_msg=='' "> order by p.id desc</if>
+		&lt;!&ndash;  升降序 &ndash;&gt;
+		<if test="data_rank_msg!=null and data_rank_msg!=''">
+			order by ${data_rank_msg} ${data_rank}
+		</if>
+
+	</select>-->
+
+
+
+
+
+	<!-- 价格升序 -->
+	<select id="rankPriceAsc" parameterType="product"  resultMap="productMap">
+		select t.* from ( select p.id,productName,price,brandId,b.brandName,p.createTime,p.updateTime from t_product p
+		left join t_brand b  on p.brandId=b.id
+     <include refid="productWhere"/>
+      order by price  ) t limit #{startPos},#{pageSize} 
+	</select> 
+	
+	
+	<!--id="方法名"  -->
+	<!--parameterType="实体类"  -->
+	
+	<insert id="addProduct" parameterType="product">
+		/*id反射*/
+      <selectKey resultType="int" order="AFTER" keyProperty="id">
+		  select last_insert_id();
+	  </selectKey>
+		insert into  t_product (productName,price,brandId,createTime,updateTime,imagePath ) values (#{productName},#{price},#{brand.id},#{createTime},#{updateTime},#{imagePath})
+	</insert>
+	<!-- 单个删除 -->
+	<delete id="deleteProduct" parameterType="product" >
+		delete from  t_product where id = #{id}
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="batchDelete" parameterType="list">
+	delete from  t_product  where id in
+	<foreach collection="list" item="ids" open="(" close=")" separator=",">
+	#{ids}
+	</foreach>
+	</delete>
+	<!-- 回显 -->
+	<select id="toUpdateProduct" parameterType="int" resultMap="productMap">
+		select * from t_product where id = #{id}
+	</select>
+	<!-- 修改 -->
+	<update id="updateProduct" parameterType="product" >
+		update t_product set  productName=#{productName},price=#{price},brandId=#{brand.id},createTime=#{createTime},updateTime=#{updateTime}, imagePath=#{imagePath} where id=#{id}
+	</update>
+	<!-- 总条数查询 -->
+	<select parameterType="product" id="findTotalCount" resultType="long">
+     select count(*) from t_product p
+     left join t_brand b  on p.brandId=b.id
+     <include refid="productWhere"/>
+     </select>
+	<!--图片插入-->
+	<insert id="addImagePath" parameterType="imageVO">
+		insert into t_image (productImagePath,productId) values (#{productImagePath},#{productId});
+
+	</insert>
+	<!--图片展示查询-->
+	<select id="findProductImage"  parameterType="imageVO" resultType="imageVO" >
+	select id,productImagePath,productId from t_image;
+	</select>
+
+	<!--单个商品图片展示查询-->
+	<select id="LookProductImage"  parameterType="Integer" resultType="imageVO" >
+	select id,productImagePath,productId from t_image where productId=#{productId};
+	</select>
+
+
+
+    <!--修改图片-->
+    <update id="updateImagePath" parameterType="imageVO">
+        update t_image set productImagePath=#{productImagePath},productId=#{productId} where id=#{id};
+
+    </update>
+   <!--图片删除-->
+	<delete id="deleteImage" parameterType="String">
+		delete  from t_image  where productId=#{productId}
+	</delete>
+
+	<!--商品图片展示productId查询-->
+	<select id="findProductIdList"  parameterType="String" resultType="imageVO" >
+	select id from t_image where productId=#{productId};
+	</select>
+
+	<!--图片删除ById-->
+	<delete id="deleteImageById" parameterType="int">
+		delete  from t_image  where id=#{productId}
+	</delete>
+  <!--接口查询-->
+	<select id="findProudctListAPI" resultType="product">
+		select id,productName,price from t_product;
+	</select>
+
+
+
+</mapper>
+    

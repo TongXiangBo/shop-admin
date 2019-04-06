@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+    <!--parameterType接收参数的类型  -->
+    <!--resultType返回类型  -->
+    <!--namespace="包名mapper接口"  -->
+    
+    
+    
+   <mapper namespace="com.fh.shop.backend.mapper.member.IMemberMapper">
+
+<!--
+
+	<resultMap id="memberMap" type="member">
+
+		<result column="shengid" property="area.shengid"></result>
+		<result column="shiid" property="area.shiid"></result>
+		<result column="xianid" property="area.xianid"></result>
+		<result column="cityName" property="area.cityName"></result>
+
+
+
+	</resultMap>
+-->
+
+
+
+	<!--  where拼接条件 -->
+	<sql id="memberWhere">
+		<where>
+			<!-- 名称 -->
+			<if test="userName!=null and userName!=''"> userName like concat('%',#{userName},'%')</if>
+
+			<if test="minBirthday!=null ">  and birthday  >= #{minBirthday} </if>
+			<if test="maxBirthday!=null "> and  birthday  &lt;= #{maxBirthday} </if>
+			<!--<if test="shengid!=-1 and shengid!=null "> and  shengid = #{shengid} </if>
+			<if test="shiid!=null and shiid!=-1 "> and  shiid= #{shiid} </if>-->
+			<if test="addressIds!=null and addressIds!='' "> and  addressIds like concat(#{addressIds},'%') </if>
+
+
+
+		</where>
+	</sql>
+
+
+
+
+
+	<!-- 总条数查询 -->
+	<select id="findTotalCount" parameterType="member" resultType="long">
+		select count(*) from t_member
+		<include refid="memberWhere"/>
+	</select>
+	<!-- 分页查询 -->
+	<select id="findMemberList" parameterType="member" resultType="member">
+		select id,userName,password,phone,email,birthday,regTime,lastLoginTime,address,headImage from t_member
+		<include refid="memberWhere"/>
+		order by id desc
+		limit #{start},#{length};
+	</select>
+
+
+	<!--<select id="findMemberList" parameterType="member" resultType="member">
+		select m.id,userName,password,phone,email,birthday,regTime,lastLoginTime,a.cityName provinceName,b.cityName cityName,d.cityName contryName from t_member m
+		left join t_area a on m.shengid=a.id left join t_area b on m.shiid = b.id left join t_area d on
+		m.xianid = d.id
+		<include refid="memberWhere"/>
+		order by id desc
+		limit #{start},#{length}
+	</select>
+-->
+
+	<!-- 回显 -->
+	<select id="findMemberInfo" parameterType="Integer" resultType="member">
+		select id,userName,password,birthday,phone,email,address,shengid,shiid,xianid,addressIds,headImage from t_member where id=#{value}
+	</select>
+
+  <!--修改-->
+	<update id="updateMemberInfo" parameterType="member">
+		update t_member set userName=#{userName},birthday=#{birthday},phone=#{phone},email=#{email},
+		address=#{address},addressIds=#{addressIds},headImage=#{headImage}
+		where id=#{id}
+
+	</update>
+
+	<insert id="addMemberInfo" parameterType="member">
+		insert into t_member (userName,birthday,phone,email,address,addressIds,headImage,regTime)
+		values (#{userName},#{birthday},#{phone},#{email},#{address},#{addressIds},#{headImage},#{regTime})
+
+	</insert>
+
+
+
+</mapper>
+    

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+    <!--parameterType接收参数的类型  -->
+    <!--resultType返回类型  -->
+    <!--namespace="包名mapper接口"  -->
+    
+    
+    
+   <mapper namespace="com.fh.shop.backend.mapper.log.ILogMapper">
+
+	<!--  where拼接条件 -->
+	<sql id="logWhere">
+		<where>
+			<!-- 名称 -->
+			<if test="userName!=null and userName!=''"> userName like concat('%',#{userName},'%')</if>
+			<if test="method!=null and method!=''"> method like concat('%',#{method},'%')</if>
+			<if test="classPath!=null and classPath!=''"> classPath like concat('%',#{classPath},'%')</if>
+
+			<!--  创建时间 -->
+			<if test="minStartTime!=null and minStartTime!=''"> and startTime >=#{minStartTime}</if>
+			<if test="maxStartTime!=null and maxStartTime!=''"> and startTime &lt;=#{maxStartTime}</if>
+			<!-- 修改时间 -->
+			<if test="minEndTime!=null and minEndTime!=''"> and endTime >=#{minEndTime}</if>
+			<if test="maxEndTime!=null and maxEndTime!=''"> and  endTime &lt;=#{maxEndTime}</if>
+
+
+		</where>
+	</sql>
+
+
+
+
+	
+  <!-- 保存login日志记录 -->
+  <insert id="addLoginInfo" parameterType="loginInfo">
+  insert into  t_login (userName,method,classPath,startTime,endTime,ip) values(#{userName},#{method},#{classPath},#{startTime},#{endTime},#{ip})
+  </insert>
+
+
+
+	<!-- 总条数查询 -->
+	<select id="findTotalCount" parameterType="loginInfo" resultType="long">
+		select count(*) from t_login
+		<include refid="logWhere"/>
+	</select>
+	<!-- 分页查询 -->
+	<select id="findLogList" parameterType="loginInfo" resultType="loginInfo">
+		select t.*from (select id,userName,method,classPath,startTime,endTime,ip from t_login
+		<include refid="logWhere"/>
+		order by id desc
+		)t
+		limit #{startPos},#{pageSize}
+	</select>
+
+       <!--日志信息添加-->
+	<insert id="addLogMesseage" parameterType="logVO">
+		insert into t_log (userName,info,status,createTime,useTime,content) values (#{userName},#{info},#{status},
+		#{createTime},#{useTime},#{content});
+	</insert>
+
+
+  </mapper>
+    

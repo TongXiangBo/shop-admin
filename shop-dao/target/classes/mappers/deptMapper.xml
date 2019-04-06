@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+    <!--parameterType接收参数的类型  -->
+    <!--resultType返回类型  -->
+    <!--namespace="包名mapper接口"  -->
+    
+    
+    
+   <mapper namespace="com.fh.shop.backend.mapper.dept.IDeptMapper">
+
+
+
+	<!-- 部门登陆查询 -->
+	<select id="findZTreeDept"  parameterType="dept" resultType="dept">
+	/*select id,pid,deptName,remark from t_dept;*/
+	select id,pid,deptName,remark from t_dept;
+	</select>
+     <!-- 部门添加-->
+    <insert id="addDeptInfo" parameterType="dept">
+       <selectKey resultType="int" keyProperty="id" order="AFTER">
+		   select last_insert_id();
+	   </selectKey>
+		insert into t_dept (deptName,pid,remark) values(#{deptName},#{pid},#{remark})
+
+	</insert>
+ <!-- 批量删除-->
+	<delete id="batchDelete" >
+		delete  from t_dept where id in
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+
+	</delete>
+	<!--修改-->
+	<update id="updateDeptInfo" parameterType="dept">
+		update  t_dept set deptName=#{deptName},pid=#{pid},remark=#{remark} where id=#{id}
+	</update>
+	<!-- excel子级部门查询 -->
+	<!--<select id="findZTreeDept"  parameterType="dept" resultType="dept">
+	select id,pid,deptName from t_dept;
+	</select>-->
+
+
+  </mapper>
+    
