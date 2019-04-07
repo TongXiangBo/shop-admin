@@ -19,7 +19,7 @@
       <module name="shop-dao" target="1.8" />
       <module name="shop-parents" target="1.8" />
       <module name="shop-po" target="1.8" />
-      <module name="shop-web" target="1.7" />
+      <module name="shop-web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

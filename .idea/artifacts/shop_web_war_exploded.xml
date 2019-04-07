@@ -13,10 +13,13 @@
           <element id="archive" name="shop-dao-1.0-SNAPSHOT.jar">
             <element id="module-output" name="shop-dao" />
           </element>
+          <element id="library" level="project" name="Maven: com.fh.shop.backend:fh-core:1.0-SNAPSHOT" />
+          <element id="archive" name="shop-common-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="shop-common" />
+          </element>
           <element id="archive" name="shop-po-1.0-SNAPSHOT.jar">
             <element id="module-output" name="shop-po" />
           </element>
-          <element id="library" level="project" name="Maven: com.fh.shop.backend:fh-core:1.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.10" />
           <element id="library" level="project" name="Maven: com.qcloud:cos_api:5.4.6" />
           <element id="library" level="project" name="Maven: joda-time:joda-time:2.9.6" />
