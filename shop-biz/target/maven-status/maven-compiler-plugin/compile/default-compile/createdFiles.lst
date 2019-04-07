@@ -1,0 +1,17 @@
+com\fh\shop\backend\biz\brand\BrandServiceImpl$1.class
+com\fh\shop\backend\biz\product\ProductServiceImpl.class
+com\fh\shop\backend\biz\member\IMemberService.class
+com\fh\shop\backend\biz\dept\DeptServiceImpl.class
+com\fh\shop\backend\biz\user\IUserservice.class
+com\fh\shop\backend\biz\brand\BrandServiceImpl.class
+com\fh\shop\backend\biz\area\IAreaService.class
+com\fh\shop\backend\biz\brand\IBrandService.class
+com\fh\shop\backend\biz\log\ILogService.class
+com\fh\shop\backend\biz\brand\IBrandImageService.class
+com\fh\shop\backend\biz\user\UserServiceImpl.class
+com\fh\shop\backend\biz\brand\BrandImageServiceImpl.class
+com\fh\shop\backend\biz\dept\IDeptService.class
+com\fh\shop\backend\biz\product\IProductService.class
+com\fh\shop\backend\biz\area\AreaServiceImpl.class
+com\fh\shop\backend\biz\log\LogServiceImpl.class
+com\fh\shop\backend\biz\member\MemberServiceImpl.class

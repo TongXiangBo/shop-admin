@@ -1,0 +1,17 @@
+com\fh\shop\backend\po\ProductApiVo.class
+com\fh\shop\backend\po\LoginInfo.class
+com\fh\shop\backend\po\Dept.class
+com\fh\shop\backend\po\Area.class
+com\fh\shop\backend\po\Page.class
+com\fh\shop\backend\po\BrandImage.class
+com\fh\shop\backend\po\LogVO.class
+com\fh\shop\backend\vo\DatatableVo.class
+com\fh\shop\backend\po\Product.class
+com\fh\shop\backend\vo\BrandVo.class
+com\fh\shop\backend\vo\MemberVo.class
+com\fh\shop\backend\vo\UserVo.class
+com\fh\shop\backend\po\Member.class
+com\fh\shop\backend\po\User.class
+com\fh\shop\backend\vo\ProductVo.class
+com\fh\shop\backend\po\Brand.class
+com\fh\shop\backend\po\ImageVO.class

@@ -15,7 +15,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="fh-core" />
+    <orderEntry type="library" name="Maven: com.fh.shop.backend:fh-core:1.0-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="shop-po" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: com.qcloud:cos_api:5.4.6" level="project" />

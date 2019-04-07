@@ -1,0 +1,9 @@
+com\fh\shop\backend\mapper\area\IAreaMapper.class
+com\fh\shop\backend\App.class
+com\fh\shop\backend\mapper\product\IProductMapper.class
+com\fh\shop\backend\mapper\brand\IBrandMapper.class
+com\fh\shop\backend\mapper\member\IMemberMapper.class
+com\fh\shop\backend\mapper\user\IUserMapper.class
+com\fh\shop\backend\mapper\brand\IBrandImageMapper.class
+com\fh\shop\backend\mapper\dept\IDeptMapper.class
+com\fh\shop\backend\mapper\log\ILogMapper.class

@@ -14,7 +14,7 @@
     <module>shop-biz</module>
     <module>shop-dao</module>
       <module>shop-web</module>
-    <module>shop-web</module>
+
       <module>shop-common</module>
 
 

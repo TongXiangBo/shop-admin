@@ -1,0 +1,12 @@
+com\fh\shop\backend\controller\area\AreaController.class
+com\fh\shop\backend\controller\user\UserController.class
+com\fh\shop\backend\aspect\Demo_Aspect.class
+com\fh\shop\backend\controller\file\FileController.class
+com\fh\shop\backend\controller\member\MemberController.class
+com\fh\shop\backend\controller\product\ProductController.class
+com\fh\shop\backend\controller\BaseController.class
+com\fh\shop\backend\controller\dept\DeptController.class
+com\fh\shop\backend\controller\brand\BrandController.class
+com\fh\shop\backend\aspect\AspectInfo.class
+com\fh\shop\backend\controller\brand\BrandImageController.class
+com\fh\shop\backend\controller\log\LogController.class

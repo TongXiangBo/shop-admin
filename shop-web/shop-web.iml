@@ -33,7 +33,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shop-biz" />
     <orderEntry type="module" module-name="shop-dao" />
-    <orderEntry type="module" module-name="fh-core" />
+    <orderEntry type="library" name="Maven: com.fh.shop.backend:fh-core:1.0-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="shop-common" />
     <orderEntry type="module" module-name="shop-po" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
